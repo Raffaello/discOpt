@@ -54,7 +54,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../CoinMP/lib -lCoinMP -lCbc -lCbcSolver -lCgl -lClp -lCoinUtils -lOsi -lOsiCbc -lOsiClp -lOsiCommonTests -lz -llapack -lbz2
+LDLIBSOPTIONS=-L../CoinMP/lib -lz -llapack -lbz2 -lCbc -lCbcSolver -lCgl -lClp -lCoinMP -lCoinUtils -lOsi -lOsiCbc -lOsiClp -lOsiCommonTests
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}

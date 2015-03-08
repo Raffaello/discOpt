@@ -16,7 +16,8 @@
 #include <vector>
 
 using std::string;
-using namespace boost::numeric::ublas;
+using boost::numeric::ublas::compressed_matrix;
+using boost::numeric::ublas::column_major;
 using std::vector;
 
 class CoinMP
@@ -37,10 +38,8 @@ protected:
     bool createProblem(const string& problemName);
     void destroyProblem();
     bool loadMatrix();
-    
-    enum class eObjSense : std::int8_t {MIN = SOLV_OBJSENS_MIN, MAX = SOLV_OBJSENS_MAX};
-    
-    inline void setObjectSense(eObjSense e) { _objSense = e; };
+       
+    inline void setObjectSense(bool max) { (max) ? _objSense = SOLV_OBJSENS_MAX : _objSense = SOLV_OBJSENS_MIN; } 
     
     double _objConst = 0.0;
     

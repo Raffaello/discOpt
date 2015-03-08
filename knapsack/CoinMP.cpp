@@ -45,11 +45,11 @@ void CoinMP::destroyProblem()
 
 bool CoinMP::loadMatrix() 
 {
-    int ret = CoinLoadMatrix(_hprob, _matrix.size2(), _matrix.size1(), _matrix.nnz(),
+  /*  int ret = CoinLoadMatrix(_hprob, _matrix.size2(), _matrix.size1(), _matrix.nnz(),
             _rangeCount, _objSense, _objConst, &_objCoeff[0], 
             &_lb[0], &_ub[0], &_rowType[0], &_rhsValue[0], nullptr, 
-            _matrix.index1_data(), _matrix., _matrix, _matrix);
-    
+            _matrix., _matrix., _matrix, _matrix);
+    */
     return true;
 }
 

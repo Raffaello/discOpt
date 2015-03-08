@@ -13,7 +13,7 @@
 
 Knapsack::Knapsack() : CoinMP()
 {
-    setObjectSense(eObjSense::MAX);
+    setObjectSense(true);
     
 }
 
@@ -75,7 +75,7 @@ bool Knapsack::solve()
     // free coinmp
     int ret;
     
-    CoinCreateProblem(_filename.c_str())
+    CoinCreateProblem(_filename.c_str());
 
     return true;
 }

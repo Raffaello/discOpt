@@ -1,4 +1,4 @@
-build/Debug/GNU-Linux-x86/Knapsack.o: Knapsack.cpp Knapsack.h CoinMP.h \
+build/Debug/GNU-Linux-x86/CoinMP.o: CoinMP.cpp CoinMP.h \
  ../CoinMP/include/coin/CoinMP.h \
  ../../../Documents/boost_1_57_0/boost/numeric/ublas/matrix_sparse.hpp \
  ../../../Documents/boost_1_57_0/boost/numeric/ublas/vector_sparse.hpp \
@@ -478,8 +478,6 @@ build/Debug/GNU-Linux-x86/Knapsack.o: Knapsack.cpp Knapsack.h CoinMP.h \
  ../../../Documents/boost_1_57_0/boost/numeric/ublas/detail/matrix_assign.hpp \
  ../../../Documents/boost_1_57_0/boost/numeric/ublas/matrix.hpp \
  ../../../Documents/boost_1_57_0/boost/numeric/ublas/io.hpp
-
-Knapsack.h:
 
 CoinMP.h:
 

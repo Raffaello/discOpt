@@ -57,19 +57,19 @@
             <pElem>../CoinMP/lib</pElem>
           </linkerAddLib>
           <linkerLibItems>
-            <linkerLibLibItem>CoinMP</linkerLibLibItem>
+            <linkerOptionItem>-lz</linkerOptionItem>
+            <linkerOptionItem>-llapack</linkerOptionItem>
+            <linkerOptionItem>-lbz2</linkerOptionItem>
             <linkerLibLibItem>Cbc</linkerLibLibItem>
             <linkerLibLibItem>CbcSolver</linkerLibLibItem>
             <linkerLibLibItem>Cgl</linkerLibLibItem>
             <linkerLibLibItem>Clp</linkerLibLibItem>
+            <linkerLibLibItem>CoinMP</linkerLibLibItem>
             <linkerLibLibItem>CoinUtils</linkerLibLibItem>
             <linkerLibLibItem>Osi</linkerLibLibItem>
             <linkerLibLibItem>OsiCbc</linkerLibLibItem>
             <linkerLibLibItem>OsiClp</linkerLibLibItem>
             <linkerLibLibItem>OsiCommonTests</linkerLibLibItem>
-            <linkerOptionItem>-lz</linkerOptionItem>
-            <linkerOptionItem>-llapack</linkerOptionItem>
-            <linkerOptionItem>-lbz2</linkerOptionItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -117,19 +117,19 @@
             <pElem>../CoinMP/lib</pElem>
           </linkerAddLib>
           <linkerLibItems>
-            <linkerLibLibItem>CoinMP</linkerLibLibItem>
+            <linkerOptionItem>-lz</linkerOptionItem>
+            <linkerOptionItem>-llapack</linkerOptionItem>
+            <linkerOptionItem>-lbz2</linkerOptionItem>
             <linkerLibLibItem>Cbc</linkerLibLibItem>
             <linkerLibLibItem>CbcSolver</linkerLibLibItem>
             <linkerLibLibItem>Cgl</linkerLibLibItem>
             <linkerLibLibItem>Clp</linkerLibLibItem>
+            <linkerLibLibItem>CoinMP</linkerLibLibItem>
             <linkerLibLibItem>CoinUtils</linkerLibLibItem>
             <linkerLibLibItem>Osi</linkerLibLibItem>
             <linkerLibLibItem>OsiCbc</linkerLibLibItem>
             <linkerLibLibItem>OsiClp</linkerLibLibItem>
             <linkerLibLibItem>OsiCommonTests</linkerLibLibItem>
-            <linkerOptionItem>-lz</linkerOptionItem>
-            <linkerOptionItem>-llapack</linkerOptionItem>
-            <linkerOptionItem>-lbz2</linkerOptionItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

@@ -20,6 +20,16 @@ int main(int argc, char** argv)
     ret = CoinInitSolver("knapsack");
 
     ret = CoinFreeSolver();
+    
+    Knapsack knapsack;
+    
+    auto a = knapsack.getSolverName();
+    auto b = knapsack.getVersion();
+    auto c = knapsack.getVersionString();
+    
+    knapsack.loadFile("");
+    
+    
     return 0;
 }
 

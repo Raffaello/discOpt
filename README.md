@@ -5,6 +5,11 @@ discrete optimization problem example with coinMP
 
 - CoinMP library
 
+## Solving problems
+
+- knapsack with branch and cut algorithm
+
+
 
 
 

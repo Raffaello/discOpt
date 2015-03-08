@@ -11,8 +11,9 @@
 #include <vector>
 
 
-Knapsack::Knapsack() 
+Knapsack::Knapsack() : CoinMP()
 {
+    setObjectSense(eObjSense::MAX);
     
 }
 
@@ -47,6 +48,11 @@ bool Knapsack::loadFile(const string& filename)
     return true;
 }
 
+bool Knapsack::setUpProblem() 
+{
+    
+}
+
 bool Knapsack::solve() 
 {
     if(_filename == "")
@@ -56,7 +62,7 @@ bool Knapsack::solve()
             return false;
     
     //set up problem with CoinMP
-    //1. init coinmp
+    //1. init coinmp V
     //2. create problem
     //3. load matrix
     //4. load names
@@ -67,7 +73,9 @@ bool Knapsack::solve()
     //9. unload problem
     
     // free coinmp
+    int ret;
     
-    
-    
+    CoinCreateProblem(_filename.c_str())
+
+    return true;
 }

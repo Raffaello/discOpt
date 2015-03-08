@@ -8,14 +8,11 @@
 #ifndef KNAPSACK_H
 #define	KNAPSACK_H
 
-#include <string>
-#include <vector>
+#include "CoinMP.h"
 
-using std::string;
-using std::vector;
 using std::pair;
     
-class Knapsack
+class Knapsack : public CoinMP
 {
     
 public:
@@ -41,6 +38,7 @@ private:
     int c = 0;
     vector<item> _vItems;
     
+    bool setUpProblem();
 };
 
 #endif	/* KNAPSACK_H */

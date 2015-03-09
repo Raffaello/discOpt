@@ -28,8 +28,8 @@ public:
     */
     typedef pair<int , int> item;
     
-    bool loadFile(const string& filename);
-    bool solve();
+    
+    bool solve(const string& filename);
     bool writeOutput();
     
 private:
@@ -38,6 +38,7 @@ private:
     int c = 0;
     vector<item> _vItems;
     
+    bool loadFile(const string& filename);
     bool setUpProblem();
 };
 

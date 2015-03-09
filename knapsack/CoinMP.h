@@ -31,7 +31,7 @@ public:
     inline double getVersion()       const { return CoinGetVersion(); };
     inline string getVersionString() const { return CoinGetVersionStr(); };
     
-    
+    void reset();
 protected:
     
     compressed_matrix<double, column_major> _matrix;
@@ -55,6 +55,8 @@ protected:
     
     vector<double> _initValues;
     
+    vector<double> _rangeValues;
+    
     //matrix in CCS format
     // use sparselib++ instead of ublas
     
@@ -62,7 +64,8 @@ private:
     HPROB _hprob = nullptr;
     const char* _objName = "obj";
     int _objSense = SOLV_OBJSENS_MIN;
-    const int _rangeCount = 0;
+    int _rangeCount = 0;
+    
     
 };
 

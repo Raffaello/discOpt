@@ -35,7 +35,7 @@ bool Knapsack::loadFile(const string& filename)
         return false;
     
     fscanf(f, "%d %d", &n, &c);
-    _vItems.reserve(n);
+    _vItems.resize(n);
     for(register unsigned int i = 0; i < n; i++)
     {
         register item it;
@@ -50,21 +50,49 @@ bool Knapsack::loadFile(const string& filename)
 
 bool Knapsack::setUpProblem() 
 {
+    _objCoeff.clear();
+    _objCoeff.resize(n);
+   
+    _rowType.clear();
+    _rowType.resize(1);
     
+    _rhsValue.clear();
+    _rhsValue.resize(1);
+    
+    _matrix.clear();
+    _matrix.resize(1,n, false);
+    
+    for(unsigned int i = 0; i < n; i++)
+    {
+        //obj
+        _objCoeff[i] = _vItems[i].first;
+        _matrix(0,i) = _vItems[i].second;
+
+    }
+    
+    _rowType[0]  = 'L';
+    _rhsValue[0] = c;
+    
+    return true;
 }
 
-bool Knapsack::solve() 
+bool Knapsack::solve(const string& filename) 
 {
+    reset();
+    
+    if(loadFile(filename) == false)
+        return false;
+    
     if(_filename == "")
         return false;
     
     if((_vItems.size() != n) || (n==0))
-            return false;
+        return false;
     
     //set up problem with CoinMP
     //1. init coinmp V
-    //2. create problem
-    //3. load matrix
+    //2. create problem V
+    //3. load matrix V
     //4. load names
     //5. coin check problem
     //6. callback set
@@ -73,9 +101,18 @@ bool Knapsack::solve()
     //9. unload problem
     
     // free coinmp
+    
     int ret;
     
-    CoinCreateProblem(_filename.c_str());
-
+    if(setUpProblem() == false)
+        return false;
+    
+    if(createProblem(_filename.c_str()) == false)
+        return false;
+    
+    if(loadMatrix() == false)
+        return false;
+        
+    
     return true;
 }

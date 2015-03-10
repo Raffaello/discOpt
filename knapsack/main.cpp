@@ -17,12 +17,8 @@ int main(int argc, char** argv)
 {
     Knapsack knapsack;
     
-    auto a = knapsack.getSolverName();
-    auto b = knapsack.getVersion();
-    auto c = knapsack.getVersionString();
-    
-    knapsack.solve("data/ks_100_0");
-    
+   if(knapsack.solve("data/ks_100_0") == false)
+       return -1;
     
     return 0;
 }

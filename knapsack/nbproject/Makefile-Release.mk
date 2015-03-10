@@ -54,7 +54,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../CoinMP/lib -lz -llapack -lbz2 -lCbc -lCbcSolver -lCgl -lClp -lCoinMP -lCoinUtils -lOsi -lOsiCbc -lOsiClp -lOsiCommonTests
+LDLIBSOPTIONS=-L../CoinMP/lib -lz -llapack -lbz2 -lCbc -lCbcSolver -lCgl -lClp -lCoinMP -lCoinUtils -lOsi -lOsiCbc -lOsiClp -lOsiCommonTests -lblas
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -67,17 +67,17 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/knapsack: ${OBJECTFILES}
 ${OBJECTDIR}/CoinMP.o: nbproject/Makefile-${CND_CONF}.mk CoinMP.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../CoinMP/include -I../../../Documents/boost_1_57_0 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/CoinMP.o CoinMP.cpp
+	$(COMPILE.cc) -O2 -I../CoinMP/include -I../eigen -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/CoinMP.o CoinMP.cpp
 
 ${OBJECTDIR}/Knapsack.o: nbproject/Makefile-${CND_CONF}.mk Knapsack.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../CoinMP/include -I../../../Documents/boost_1_57_0 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Knapsack.o Knapsack.cpp
+	$(COMPILE.cc) -O2 -I../CoinMP/include -I../eigen -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Knapsack.o Knapsack.cpp
 
 ${OBJECTDIR}/main.o: nbproject/Makefile-${CND_CONF}.mk main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../CoinMP/include -I../../../Documents/boost_1_57_0 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -O2 -I../CoinMP/include -I../eigen -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:

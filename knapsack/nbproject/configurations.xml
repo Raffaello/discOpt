@@ -43,13 +43,14 @@
           <standard>10</standard>
           <incDir>
             <pElem>../CoinMP/include</pElem>
+            <pElem>../eigen</pElem>
           </incDir>
         </cTool>
         <ccTool>
           <standard>8</standard>
           <incDir>
             <pElem>../CoinMP/include</pElem>
-            <pElem>../../../Documents/boost_1_57_0</pElem>
+            <pElem>../eigen</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
@@ -70,6 +71,7 @@
             <linkerLibLibItem>OsiCbc</linkerLibLibItem>
             <linkerLibLibItem>OsiClp</linkerLibLibItem>
             <linkerLibLibItem>OsiCommonTests</linkerLibLibItem>
+            <linkerOptionItem>-lblas</linkerOptionItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -96,6 +98,7 @@
           <standard>10</standard>
           <incDir>
             <pElem>../CoinMP/include</pElem>
+            <pElem>../eigen</pElem>
           </incDir>
         </cTool>
         <ccTool>
@@ -103,7 +106,7 @@
           <standard>8</standard>
           <incDir>
             <pElem>../CoinMP/include</pElem>
-            <pElem>../../../Documents/boost_1_57_0</pElem>
+            <pElem>../eigen</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>
@@ -130,6 +133,7 @@
             <linkerLibLibItem>OsiCbc</linkerLibLibItem>
             <linkerLibLibItem>OsiClp</linkerLibLibItem>
             <linkerLibLibItem>OsiCommonTests</linkerLibLibItem>
+            <linkerOptionItem>-lblas</linkerOptionItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

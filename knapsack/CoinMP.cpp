@@ -12,7 +12,7 @@ CoinMP::CoinMP()
     int ret;
     
     ret = CoinInitSolver("");
-    if(ret != 0)
+    if(ret != SOLV_CALL_SUCCESS)
     {
         //error
     }
@@ -25,7 +25,7 @@ CoinMP::~CoinMP()
 {
     int ret;
     ret = CoinFreeSolver();
-    if(ret != 0)
+    if(ret != SOLV_CALL_SUCCESS)
     {
         //error
     }
@@ -43,11 +43,12 @@ bool CoinMP::createProblem(const string& problemName)
 }
 
 void CoinMP::destroyProblem() 
-{
+{   
     if(_hprob != nullptr)
     {
         CoinUnloadProblem(_hprob);
         _hprob = nullptr;
+        loaded = false;
     }
 }
 
@@ -58,7 +59,7 @@ void CoinMP::reset()
         destroyProblem();
     _initValues.clear();
     _lb.clear();
-    _matrix.clear();
+    _matrix.resize(0,0);
     _objCoeff.clear();
     _objConst=0.0;
     setObjectSense(false);
@@ -71,22 +72,54 @@ void CoinMP::reset()
 }
 
 bool CoinMP::loadMatrix() 
-{
-    _matrix.complete_index1_data();
-
-    int    *mBegin  = nullptr; //new int[_matrix.size2() + 1];
-    int    *mCount  = nullptr;
-    int    *mIndex  = reinterpret_cast<int*> (&_matrix.index1_data()[0]);
-    double *mValues = &_matrix.value_data()[0];
+{   
+    if(loaded)
+        return true;
     
+    if(_matrix.isCompressed() == false)
+        _matrix.makeCompressed();
     
-    int ret = CoinLoadMatrix(_hprob, _matrix.size2(), _matrix.size1(), _matrix.nnz(),
+    int    *mCount  = _matrix.outerIndexPtr();
+    int    *mIndex  = _matrix.innerIndexPtr();
+    double *mValues = _matrix.valuePtr();
+    
+    vector<int> mBegin(_matrix.outerSize() + 1);
+    
+    mBegin[0] = 0;
+    for(int i = 1; i < _matrix.outerSize(); i++)
+    {
+        mBegin[i+1] = mBegin[i] + mCount[i];
+    }
+    
+    int ret = CoinLoadMatrix(_hprob, _matrix.cols(), _matrix.rows(), _matrix.nonZeros(),
             _rangeCount, _objSense, _objConst, &_objCoeff[0], 
             &_lb[0], &_ub[0], &_rowType[0], &_rhsValue[0], &_rangeValues[0], 
-            mBegin, mCount, mIndex, mValues);
+            &mBegin[0], mCount, mIndex, mValues);
+    if(ret != SOLV_CALL_SUCCESS)
+        return false;
     
-    return true;
+    //ret = CoinLoadNames(_hprob, &_colNames[0], &_rowNames[0], _objName);
+    //if(ret != 0)
+    //    return false;
+    
+    ret = CoinCheckProblem(_hprob);
+    if (ret != SOLV_CALL_SUCCESS) 
+        //fprintf(stdout, "Check Problem failed (result = %d)\n", ret);
+        return false;
+       
+    return loaded=true;
 }
+
+bool CoinMP::solveProblem(const int method) 
+{
+    if(loaded == false)
+        return false;
+    
+    int result = CoinOptimizeProblem(_hprob, method);
+    if(result != 0)
+        return false;
+}
+
 
 
 

@@ -10,15 +10,12 @@
 
 #include <string>
 #include "coin/CoinMP.h"
-#include "boost/numeric/ublas/matrix_sparse.hpp"
-#include "boost/numeric/ublas/io.hpp"
-#include <cstdint>
 #include <vector>
+#include <Eigen/SparseCore>
 
 using std::string;
-using boost::numeric::ublas::compressed_matrix;
-using boost::numeric::ublas::column_major;
 using std::vector;
+using Eigen::SparseMatrix;
 
 class CoinMP
 {
@@ -33,11 +30,11 @@ public:
     
     void reset();
 protected:
-    
-    compressed_matrix<double, column_major> _matrix;
+    SparseMatrix<double> _matrix;
     bool createProblem(const string& problemName);
     void destroyProblem();
     bool loadMatrix();
+    bool solveProblem(const int method = SOLV_METHOD_DEFAULT);
        
     inline void setObjectSense(bool max) { (max) ? _objSense = SOLV_OBJSENS_MAX : _objSense = SOLV_OBJSENS_MIN; } 
     
@@ -57,15 +54,22 @@ protected:
     
     vector<double> _rangeValues;
     
-    //matrix in CCS format
-    // use sparselib++ instead of ublas
+    enum class eSolveMethod { 
+        def     = SOLV_METHOD_DEFAULT, 
+        barrier = SOLV_METHOD_BARRIER, 
+        benders = SOLV_METHOD_BENDERS,
+        deq     = SOLV_METHOD_DEQ, 
+        dual    = SOLV_METHOD_DUAL, 
+        ev      = SOLV_METHOD_EV, 
+        net     = SOLV_METHOD_NETWORK, 
+        primal  = SOLV_METHOD_PRIMAL };
     
 private:
-    HPROB _hprob = nullptr;
+    HPROB _hprob         = nullptr;
     const char* _objName = "obj";
-    int _objSense = SOLV_OBJSENS_MIN;
-    int _rangeCount = 0;
-    
+    int _objSense        = SOLV_OBJSENS_MIN;
+    int _rangeCount      = 0;
+    bool loaded          = false;
     
 };
 

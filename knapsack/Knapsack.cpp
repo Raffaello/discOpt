@@ -50,6 +50,8 @@ bool Knapsack::loadFile(const string& filename)
 
 bool Knapsack::setUpProblem() 
 {
+    using Eigen::Triplet;
+    
     _objCoeff.clear();
     _objCoeff.resize(n);
    
@@ -59,16 +61,19 @@ bool Knapsack::setUpProblem()
     _rhsValue.clear();
     _rhsValue.resize(1);
     
-    _matrix.clear();
-    _matrix.resize(1,n, false);
+    _matrix.resize(0,0);
+    _matrix.resize(1,n);
     
+    vector<Triplet<double>> tripleList;
+    tripleList.reserve(n);
     for(unsigned int i = 0; i < n; i++)
     {
         //obj
         _objCoeff[i] = _vItems[i].first;
-        _matrix(0,i) = _vItems[i].second;
-
+        tripleList.push_back(Triplet<double>(0, i, _vItems[i].second));
     }
+    
+    _matrix.setFromTriplets(tripleList.begin(), tripleList.end());
     
     _rowType[0]  = 'L';
     _rhsValue[0] = c;
@@ -113,6 +118,8 @@ bool Knapsack::solve(const string& filename)
     if(loadMatrix() == false)
         return false;
         
+    if(solveProblem() == false)
+        return false;
     
     return true;
 }

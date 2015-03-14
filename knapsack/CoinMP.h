@@ -12,16 +12,22 @@
 #include "coin/CoinMP.h"
 #include <vector>
 #include <Eigen/SparseCore>
+#include <functional>
+#include <iostream>
 
 using std::string;
 using std::vector;
 using Eigen::SparseMatrix;
+using std::function;
+using std::cout;
 
 class CoinMP
 {
 public:
-    CoinMP();
-    CoinMP(const CoinMP& orig);
+    typedef function<void(string)> writeDelegate;
+    
+    CoinMP(writeDelegate write = nullptr);
+    CoinMP(const CoinMP& orig) = delete;
     virtual ~CoinMP();
     
     inline string getSolverName()    const { return CoinGetSolverName(); };
@@ -30,12 +36,28 @@ public:
     
     void reset();
 protected:
+    writeDelegate _write;
+    
+    enum class eSolveMethod : int { 
+        Default = SOLV_METHOD_DEFAULT, 
+        Barrier = SOLV_METHOD_BARRIER, 
+        Benders = SOLV_METHOD_BENDERS,
+        Deq     = SOLV_METHOD_DEQ, 
+        Dual    = SOLV_METHOD_DUAL, 
+        Ev      = SOLV_METHOD_EV, 
+        Network = SOLV_METHOD_NETWORK, 
+        Primal  = SOLV_METHOD_PRIMAL 
+    };
+    
     SparseMatrix<double> _matrix;
     bool createProblem(const string& problemName);
     void destroyProblem();
-    bool loadMatrix();
-    bool solveProblem(const int method = SOLV_METHOD_DEFAULT);
-       
+    
+    bool loadProblem();
+    bool unloadProblem();        
+    bool solveProblem(const eSolveMethod method = eSolveMethod::Default);
+    bool writeSolution();
+    
     inline void setObjectSense(bool max) { (max) ? _objSense = SOLV_OBJSENS_MAX : _objSense = SOLV_OBJSENS_MIN; } 
     
     double _objConst = 0.0;
@@ -49,20 +71,12 @@ protected:
     
     vector<string> _colNames;
     vector<string> _rowNames;
+
+    vector<char> _colTypes;
     
     vector<double> _initValues;
     
-    vector<double> _rangeValues;
-    
-    enum class eSolveMethod { 
-        def     = SOLV_METHOD_DEFAULT, 
-        barrier = SOLV_METHOD_BARRIER, 
-        benders = SOLV_METHOD_BENDERS,
-        deq     = SOLV_METHOD_DEQ, 
-        dual    = SOLV_METHOD_DUAL, 
-        ev      = SOLV_METHOD_EV, 
-        net     = SOLV_METHOD_NETWORK, 
-        primal  = SOLV_METHOD_PRIMAL };
+    vector<double> _rangeValues; 
     
 private:
     HPROB _hprob         = nullptr;
@@ -71,6 +85,14 @@ private:
     int _rangeCount      = 0;
     bool loaded          = false;
     
+    bool loadMatrix();
+    bool loadNames();
+    bool loadColumnType();
+    
+    inline static void print(const string str) { _print(str.c_str(), nullptr); };
+    inline static int _print(const char* str, void* p)   { cout << str; };
+    //COIN_MSGLOG_CB _writeMsg;
+    inline int _printMsg(const char*str, void* p) { _write(str); }
 };
 
 #endif	/* COINMP_H */

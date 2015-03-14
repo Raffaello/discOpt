@@ -74,6 +74,18 @@
             <linkerOptionItem>-lblas</linkerOptionItem>
           </linkerLibItems>
         </linkerTool>
+        <requiredProjects>
+          <makeArtifact PL="../CoinMP"
+                        CT="0"
+                        CN="Default"
+                        AC="true"
+                        BL="false"
+                        WD="../CoinMP"
+                        BC="${MAKE} -f Makefile"
+                        CC="${MAKE} -f Makefile clean"
+                        OP="">
+          </makeArtifact>
+        </requiredProjects>
       </compileType>
       <item path="CoinMP.cpp" ex="false" tool="1" flavor2="0">
       </item>

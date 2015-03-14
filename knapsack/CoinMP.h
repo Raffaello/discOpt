@@ -33,7 +33,8 @@ public:
     inline string getSolverName()    const { return CoinGetSolverName(); };
     inline double getVersion()       const { return CoinGetVersion(); };
     inline string getVersionString() const { return CoinGetVersionStr(); };
-    
+    void writeSolution();
+    void writeProblem();
     void reset();
 protected:
     writeDelegate _write;
@@ -56,9 +57,9 @@ protected:
     bool loadProblem();
     bool unloadProblem();        
     bool solveProblem(const eSolveMethod method = eSolveMethod::Default);
-    bool writeSolution();
     
-    inline void setObjectSense(bool max) { (max) ? _objSense = SOLV_OBJSENS_MAX : _objSense = SOLV_OBJSENS_MIN; } 
+    
+    inline void setObjectSense(bool max) { ((max)? _objSense = SOLV_OBJSENS_MAX : _objSense = SOLV_OBJSENS_MIN); } 
     
     double _objConst = 0.0;
     

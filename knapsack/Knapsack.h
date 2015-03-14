@@ -16,7 +16,7 @@ class Knapsack : public CoinMP
 {
     
 public:
-    Knapsack();
+    Knapsack(writeDelegate write = nullptr);
     Knapsack(const Knapsack& orig) = delete;
     virtual ~Knapsack();
     /*

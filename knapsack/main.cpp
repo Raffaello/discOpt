@@ -20,14 +20,15 @@ int main(int argc, char** argv)
     
     Knapsack knapsack;
     
-   if(knapsack.solve("data/ks_100_0") == false)
+   if(knapsack.solve("data/test") == false)
    {
        cout << "error solve : " << argv[1] << endl;
        return -1;
    }
     
     cout << "Solution: " << endl;
-    
+    knapsack.writeSolution();
+    knapsack.writeProblem();
     return 0;
 }
 

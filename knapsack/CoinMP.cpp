@@ -98,6 +98,7 @@ bool CoinMP::loadProblem()
     
     if(loadColumnType() == false)
         return false;
+    
     int ret = CoinCheckProblem(_hprob);
     if (ret != SOLV_CALL_SUCCESS) 
     {
@@ -123,23 +124,35 @@ bool CoinMP::unloadProblem()
 
 bool CoinMP::loadMatrix() 
 {   
-    if(_matrix.isCompressed() == false)
-        _matrix.makeCompressed();
+    if(_matrix.isCompressed())
+        _matrix.uncompress();
     
     int    *mCount  = _matrix.outerIndexPtr();
     int    *mIndex  = _matrix.innerIndexPtr();
     double *mValues = _matrix.valuePtr();
+    int    *mBegin  = _matrix.innerNonZeroPtr();
     
+    for(int i =0; i < 3; i++) 
+    {
+        auto a = mCount[i];
+        auto b = mIndex[i];
+        auto c = mValues[i];
+        
+        auto d = mBegin[i];
+        
+        int ii=0;
+    }
+    /*
     vector<int> mBegin(_matrix.outerSize() + 1);
     
     mBegin[0] = 0;
     for(int i = 1; i < _matrix.outerSize(); i++)
         mBegin[i+1] = mBegin[i] + mCount[i];
-    
+    */
     int ret = CoinLoadMatrix(_hprob, _matrix.cols(), _matrix.rows(), _matrix.nonZeros(),
             _rangeCount, _objSense, _objConst, &_objCoeff[0], 
             &_lb[0], &_ub[0], &_rowType[0], &_rhsValue[0], &_rangeValues[0], 
-            &mBegin[0], mCount, mIndex, mValues);
+            mBegin, mCount, mIndex, mValues);
     if(ret != SOLV_CALL_SUCCESS)
     {
         _write(string("LoadMatrix error: ") + to_string(ret) + '\n');
@@ -199,11 +212,15 @@ bool CoinMP::solveProblem(const eSolveMethod method)
         _write(string("solveProblem error: ") + to_string(result) + '\n');
         return false;
     }
+    
+    return true;
 }
 
-bool CoinMP::writeSolution() 
+void CoinMP::writeSolution() 
 {
-
+    if(_hprob == nullptr)
+        return;
+    
     _write(
         string("result: ") 
         + CoinGetSolutionText(_hprob) + '\n'
@@ -211,28 +228,49 @@ bool CoinMP::writeSolution()
         + "Object Value:" + to_string(CoinGetObjectValue(_hprob)) + '\n'
             
     );
+    
+    int colCount = CoinGetColCount(_hprob);
+    double* xValues = new double[colCount];
+    CoinGetSolutionValues(_hprob, xValues, nullptr, nullptr, nullptr);
+    for(int i = 0; i < colCount; i++)
+    {
+        _write(string("X")+to_string(i)+" = "+ to_string(xValues[i]));
+    }
    
-    /** example.c
-     * 
-	colCount = CoinGetColCount(hProb);
-	xValues = (double* )malloc(colCount * sizeof(double));
-	CoinGetSolutionValues(hProb, xValues, NULL, NULL, NULL);
-	for (i = 0; i < colCount; i++) {
-		if (xValues[i] != 0.0) {
-			ColName = CoinGetColName(hProb, i);
-			fprintf(stdout, "%s = %.20g\n", ColName, xValues[i]);
-		}
-	}
-	fprintf(stdout, "---------------------------------------\n\n");
-	assert(solutionStatus==0);
-	assert(strcmp(solutionText,"Optimal solution found")==0);
-	if (optimalValue != 0.0) {
-		assert( fabs(objectValue-optimalValue) < 0.001 );
-	}
-            
-    */
+    delete[] xValues;
 }
 
+void CoinMP::writeProblem() 
+{
+    string str = "OBJ = ";
+    
+    str += ((_objSense==SOLV_OBJSENS_MIN)?"Min":"Max");
+    str += " ";
+    for(unsigned int i = 0; i < _objCoeff.size(); i++)
+    {
+        auto &v = _objCoeff.at(i);
+        str += to_string(v) + "X" + to_string(i) + " + ";
+    }
+    string::size_type l = str.length();
+    str[l - 2] = 0;
+    str[l - 3] = '\n';
+    _write(str);
+    str.clear();
+    
+    for(unsigned int i = 0; i < _matrix.rows(); i++)
+    {
+        for(unsigned int j = 0; j < _matrix.cols(); j++)
+        {
+            str += to_string(_matrix.coeff(i,j)) + " + ";
+        }
+        
+        str[str.length()-2] = _rowType[i];
+        str += to_string(_rhsValue[i]);
+        _write(str+'\n');
+        str.clear();
+    }
+    
+}
 
 
 

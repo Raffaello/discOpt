@@ -11,10 +11,9 @@
 #include <vector>
 
 
-Knapsack::Knapsack() : CoinMP()
+Knapsack::Knapsack(writeDelegate write) : CoinMP(write)
 {
     setObjectSense(true);
-    
 }
 
 
@@ -29,7 +28,7 @@ bool Knapsack::loadFile(const string& filename)
     
     _filename="";
     _vItems.clear();
-    
+    //setObjectSense(true);
     f = fopen(filename.c_str(), "r");
     if(f == nullptr)
         return false;
@@ -51,7 +50,8 @@ bool Knapsack::loadFile(const string& filename)
 bool Knapsack::setUpProblem() 
 {
     using Eigen::Triplet;
-    n=2;
+
+    setObjectSense(true);
     _objCoeff.clear();
     _objCoeff.resize(n);
     _colTypes.clear();

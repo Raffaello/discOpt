@@ -30,7 +30,7 @@ public:
     
     
     bool solve(const string& filename);
-    bool writeOutput();
+    //bool writeOutput();
     
 private:
     string _filename = "";

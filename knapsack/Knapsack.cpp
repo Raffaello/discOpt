@@ -63,6 +63,11 @@ bool Knapsack::setUpProblem()
     _rhsValue.clear();
     _rhsValue.resize(1);
     
+    _lb.clear();
+    _lb.resize(n);
+    _ub.clear();
+    _ub.resize(n);
+    
     _matrix.resize(0,0);
     _matrix.resize(1,n);
     
@@ -75,13 +80,15 @@ bool Knapsack::setUpProblem()
         _objCoeff[i] = _vItems[i].first;
         _colTypes[i] = 'B';
         tripleList.push_back(Triplet<double>(0, i, _vItems[i].second));
+        _ub[i] = 1;
+        _lb[i] = 0;
     }
     
     _matrix.setFromTriplets(tripleList.begin(), tripleList.end());
     
     _rowType[0]  = 'L';
     _rhsValue[0] = c;
-    
+
     return true;
 }
 
@@ -102,12 +109,12 @@ bool Knapsack::solve(const string& filename)
     //1. init coinmp V
     //2. create problem V
     //3. load matrix V
-    //4. load names
-    //5. coin check problem
+    //4. load names 
+    //5. coin check problem V
     //6. callback set
-    //7. optimize
-    //8. write solution
-    //9. unload problem
+    //7. optimize V
+    //8. write solution V
+    //9. unload problem V
     
     // free coinmp
     
@@ -127,3 +134,6 @@ bool Knapsack::solve(const string& filename)
     
     return true;
 }
+
+
+

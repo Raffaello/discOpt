@@ -35,6 +35,7 @@ public:
     inline string getVersionString() const { return CoinGetVersionStr(); };
     void writeSolution();
     void writeProblem();
+    virtual void writeOutput();
     void reset();
 protected:
     writeDelegate _write;

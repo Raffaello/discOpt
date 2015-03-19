@@ -6,6 +6,7 @@
  */
 
 #include "CoinMP.h"
+#include <cmath>
 
 using std::to_string;
 
@@ -103,7 +104,7 @@ bool CoinMP::loadProblem()
     if (ret != SOLV_CALL_SUCCESS) 
     {
         _write(string("checkProblem error: ") + to_string(ret) + '\n');
-    //    return false;
+        return false;
     }
     
     return loaded=true;
@@ -130,29 +131,19 @@ bool CoinMP::loadMatrix()
     int    *mCount  = _matrix.outerIndexPtr();
     int    *mIndex  = _matrix.innerIndexPtr();
     double *mValues = _matrix.valuePtr();
-    int    *mBegin  = _matrix.innerNonZeroPtr();
+    //int    *mBegin  = _matrix.innerNonZeroPtr();
+
     
-    for(int i =0; i < 3; i++) 
-    {
-        auto a = mCount[i];
-        auto b = mIndex[i];
-        auto c = mValues[i];
-        
-        auto d = mBegin[i];
-        
-        int ii=0;
-    }
-    /*
     vector<int> mBegin(_matrix.outerSize() + 1);
     
     mBegin[0] = 0;
     for(int i = 1; i < _matrix.outerSize(); i++)
         mBegin[i+1] = mBegin[i] + mCount[i];
-    */
+   
     int ret = CoinLoadMatrix(_hprob, _matrix.cols(), _matrix.rows(), _matrix.nonZeros(),
             _rangeCount, _objSense, _objConst, &_objCoeff[0], 
             &_lb[0], &_ub[0], &_rowType[0], &_rhsValue[0], &_rangeValues[0], 
-            mBegin, mCount, mIndex, mValues);
+            &mBegin[0], mCount, mIndex, mValues);
     if(ret != SOLV_CALL_SUCCESS)
     {
         _write(string("LoadMatrix error: ") + to_string(ret) + '\n');
@@ -225,7 +216,7 @@ void CoinMP::writeSolution()
         string("result: ") 
         + CoinGetSolutionText(_hprob) + '\n'
         + "status:" + to_string(CoinGetSolutionStatus(_hprob)) + '\n'
-        + "Object Value:" + to_string(CoinGetObjectValue(_hprob)) + '\n'
+        + "Object Value:" + to_string(round(CoinGetObjectValue(_hprob))) + '\n'
             
     );
     
@@ -269,7 +260,23 @@ void CoinMP::writeProblem()
         _write(str+'\n');
         str.clear();
     }
+}
+
+void CoinMP::writeOutput() 
+{
+    string str;
+    str = to_string(CoinGetObjectValue(_hprob)) + " ";
+    str += (CoinGetSolutionStatus(_hprob) == 0)?"1":"0";
+    str += "\n";
+    _write(str);
+    str.clear();
+    for(unsigned int i = 0; i < _objCoeff.size(); i++)
+    {
+        auto &v = _objCoeff.at(i);
+        _write(to_string(v) + " ");
+    }
     
+    _write("\n");
 }
 
 

@@ -106,19 +106,10 @@ bool Knapsack::solve(const string& filename)
         return false;
     
     //set up problem with CoinMP
-    //1. init coinmp V
-    //2. create problem V
-    //3. load matrix V
     //4. load names 
-    //5. coin check problem V
     //6. callback set
-    //7. optimize V
-    //8. write solution V
-    //9. unload problem V
     
     // free coinmp
-    
-    int ret;
     
     if(setUpProblem() == false)
         return false;
@@ -134,6 +125,7 @@ bool Knapsack::solve(const string& filename)
     
     return true;
 }
+
 
 
 

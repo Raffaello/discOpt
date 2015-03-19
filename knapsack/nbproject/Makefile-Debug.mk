@@ -67,17 +67,17 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/knapsack: ${OBJECTFILES}
 ${OBJECTDIR}/CoinMP.o: nbproject/Makefile-${CND_CONF}.mk CoinMP.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../CoinMP/include -I../eigen -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/CoinMP.o CoinMP.cpp
+	$(COMPILE.cc) -g -DDEBUG -I../CoinMP/include -I../eigen -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/CoinMP.o CoinMP.cpp
 
 ${OBJECTDIR}/Knapsack.o: nbproject/Makefile-${CND_CONF}.mk Knapsack.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../CoinMP/include -I../eigen -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Knapsack.o Knapsack.cpp
+	$(COMPILE.cc) -g -DDEBUG -I../CoinMP/include -I../eigen -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Knapsack.o Knapsack.cpp
 
 ${OBJECTDIR}/main.o: nbproject/Makefile-${CND_CONF}.mk main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../CoinMP/include -I../eigen -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -DDEBUG -I../CoinMP/include -I../eigen -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:

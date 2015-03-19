@@ -31,7 +31,6 @@ public:
     
     bool solve(const string& filename);
     //bool writeOutput();
-    
 private:
     string _filename = "";
     unsigned int n = 0;

@@ -52,6 +52,9 @@
             <pElem>../CoinMP/include</pElem>
             <pElem>../eigen</pElem>
           </incDir>
+          <preprocessorList>
+            <Elem>DEBUG</Elem>
+          </preprocessorList>
         </ccTool>
         <linkerTool>
           <linkerAddLib>
@@ -120,6 +123,9 @@
             <pElem>../CoinMP/include</pElem>
             <pElem>../eigen</pElem>
           </incDir>
+          <preprocessorList>
+            <Elem>NDEBUG</Elem>
+          </preprocessorList>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>

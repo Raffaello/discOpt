@@ -21,19 +21,25 @@ int main(int argc, char** argv)
     Knapsack knapsack;
     if(argc != 2)
     {
-        cout << "argument [filename] missing";
+        cout << "knapsack [filename] [file] missing" << endl;
+        //return -1;
+    }
+   
+    bool res = knapsack.solve(/*argv[1]*/"data/ks_4_0");
+#ifdef DEBUG
+    cout << "Problem: " << endl;
+    knapsack.writeProblem();
+#endif  
+    if(res == false)
+    {
+        cout << "error solve : " << argv[1] << endl;
         return -1;
     }
     
-   if(knapsack.solve(argv[1]) == false)
-   {
-       cout << "error solve : " << argv[1] << endl;
-       return -1;
-   }
-    
-    //cout << "Solution: " << endl;
+#ifdef DEBUG
+    cout << "Solution: " << endl;
     //knapsack.writeSolution();
-    //knapsack.writeProblem();
+#endif
     knapsack.writeOutput();
     return 0;
 }

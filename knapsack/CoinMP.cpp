@@ -125,8 +125,8 @@ bool CoinMP::unloadProblem()
 
 bool CoinMP::loadMatrix() 
 {   
-    if(_matrix.isCompressed())
-        _matrix.uncompress();
+    //if(_matrix.isCompressed())
+    //    _matrix.uncompress();
     
     int    *mCount  = _matrix.outerIndexPtr();
     int    *mIndex  = _matrix.innerIndexPtr();
@@ -135,11 +135,11 @@ bool CoinMP::loadMatrix()
 
     
     vector<int> mBegin(_matrix.outerSize() + 1);
-    
-    mBegin[0] = 0;
-    for(int i = 1; i < _matrix.outerSize(); i++)
-        mBegin[i+1] = mBegin[i] + mCount[i];
    
+    mBegin[0] = 0;
+    for(int i = 0; i < _matrix.outerSize(); i++)
+        mBegin[i+1] = mBegin[i] + mCount[i];
+
     int ret = CoinLoadMatrix(_hprob, _matrix.cols(), _matrix.rows(), _matrix.nonZeros(),
             _rangeCount, _objSense, _objConst, &_objCoeff[0], 
             &_lb[0], &_ub[0], &_rowType[0], &_rhsValue[0], &_rangeValues[0], 
@@ -270,14 +270,25 @@ void CoinMP::writeOutput()
     str += "\n";
     _write(str);
     str.clear();
-    for(unsigned int i = 0; i < _objCoeff.size(); i++)
+    
+    int colCount = CoinGetColCount(_hprob);
+    double *xValues = new double[colCount];
+    if(CoinGetSolutionValues(_hprob, xValues, NULL, NULL, NULL) != SOLV_CALL_SUCCESS) 
     {
-        auto &v = _objCoeff.at(i);
-        _write(to_string(v) + " ");
+        delete[] xValues;
+        return;
+    }   
+	
+    
+    for(unsigned int i = 0; i < colCount; i++)
+    {
+        _write(to_string(static_cast<int>(round(xValues[i]))) + " ");
     }
     
     _write("\n");
 }
+
+
 
 
 

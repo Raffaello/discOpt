@@ -125,21 +125,39 @@ bool CoinMP::unloadProblem()
 
 bool CoinMP::loadMatrix() 
 {   
-    //if(_matrix.isCompressed())
-    //    _matrix.uncompress();
+    if(_matrix.isCompressed())
+        _matrix.uncompress();
     
-    int    *mCount  = _matrix.outerIndexPtr();
+    int    *mCount  = _matrix.innerNonZeroPtr();
     int    *mIndex  = _matrix.innerIndexPtr();
     double *mValues = _matrix.valuePtr();
-    //int    *mBegin  = _matrix.innerNonZeroPtr();
-
-    
+    int    *mBegin  = _matrix.outerIndexPtr();
+   
+    /*
     vector<int> mBegin(_matrix.outerSize() + 1);
    
     mBegin[0] = 0;
     for(int i = 0; i < _matrix.outerSize(); i++)
         mBegin[i+1] = mBegin[i] + mCount[i];
-
+    */
+#ifdef DEBUG
+    _write("\nmValues: ");
+    for(int i = 0; i<_matrix.nonZeros(); i++)
+        _write(to_string(mValues[i]) + " ");
+    
+    _write("\nmIndex: ");
+    for(int i = 0; i<_matrix.innerSize(); i++)
+        _write(to_string(mIndex[i]) + " ");
+    
+    _write("\nmCount: ");
+    for(int i = 0; i<_matrix.outerSize(); i++)
+        _write(to_string(mCount[i]) + " ");
+    
+     _write("\nmBegin: ");
+    for(int i = 0; i<=_matrix.outerSize(); i++)
+        _write(to_string(mBegin[i]) + " ");
+#endif
+    
     int ret = CoinLoadMatrix(_hprob, _matrix.cols(), _matrix.rows(), _matrix.nonZeros(),
             _rangeCount, _objSense, _objConst, &_objCoeff[0], 
             &_lb[0], &_ub[0], &_rowType[0], &_rhsValue[0], &_rangeValues[0], 
@@ -265,7 +283,7 @@ void CoinMP::writeProblem()
 void CoinMP::writeOutput() 
 {
     string str;
-    str = to_string(CoinGetObjectValue(_hprob)) + " ";
+    str = to_string(static_cast<int>(round(CoinGetObjectValue(_hprob)))) + " ";
     str += (CoinGetSolutionStatus(_hprob) == 0)?"1":"0";
     str += "\n";
     _write(str);

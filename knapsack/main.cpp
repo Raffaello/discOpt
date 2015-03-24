@@ -22,10 +22,10 @@ int main(int argc, char** argv)
     if(argc != 2)
     {
         cout << "knapsack [filename] [file] missing" << endl;
-        //return -1;
+        return -1;
     }
    
-    bool res = knapsack.solve(/*argv[1]*/"data/ks_4_0");
+    bool res = knapsack.solve(argv[1]);
 #ifdef DEBUG
     cout << "Problem: " << endl;
     knapsack.writeProblem();

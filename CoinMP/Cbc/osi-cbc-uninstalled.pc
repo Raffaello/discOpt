@@ -1,0 +1,10 @@
+prefix=/home/raffa/Documents/discOpt/CoinMP
+libdir=/home/raffa/Documents/discOpt/CoinMP/Cbc/src/OsiCbc
+
+Name: OsiCbc
+Description: COIN-OR Open Solver Interface for CBC
+URL: https://projects.coin-or.org/Osi
+Version: 2.8
+Libs: ${libdir}/libOsiCbc.la
+Cflags: -I/home/raffa/Documents/discOpt/CoinMP/Cbc/src/OsiCbc
+Requires: cbc

@@ -4,7 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>CoinMP.h</itemPath>
+      <itemPath>../CoinMP.h</itemPath>
       <itemPath>Knapsack.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -14,7 +14,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>CoinMP.cpp</itemPath>
+      <itemPath>../CoinMP.cpp</itemPath>
       <itemPath>Knapsack.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
@@ -90,9 +90,9 @@
           </makeArtifact>
         </requiredProjects>
       </compileType>
-      <item path="CoinMP.cpp" ex="false" tool="1" flavor2="0">
+      <item path="../CoinMP.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="CoinMP.h" ex="false" tool="3" flavor2="0">
+      <item path="../CoinMP.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Knapsack.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -155,9 +155,9 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="CoinMP.cpp" ex="false" tool="1" flavor2="0">
+      <item path="../CoinMP.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="CoinMP.h" ex="false" tool="3" flavor2="0">
+      <item path="../CoinMP.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Knapsack.cpp" ex="false" tool="1" flavor2="0">
       </item>

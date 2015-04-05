@@ -1,0 +1,10 @@
+prefix=/home/raffa/Documents/discOpt/CoinMP
+libdir=/home/raffa/Documents/discOpt/CoinMP/Clp/src/OsiClp
+
+Name: OsiClp
+Description: COIN-OR Open Solver Interface for CLP
+URL: https://projects.coin-or.org/Osi
+Version: 1.15
+Libs: ${libdir}/libOsiClp.la 
+Cflags: -I/home/raffa/Documents/discOpt/CoinMP/Clp/src/OsiClp
+Requires: clp osi 

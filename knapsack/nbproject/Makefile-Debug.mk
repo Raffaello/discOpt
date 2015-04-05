@@ -35,7 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/CoinMP.o \
+	${OBJECTDIR}/_ext/1472/CoinMP.o \
 	${OBJECTDIR}/Knapsack.o \
 	${OBJECTDIR}/main.o
 
@@ -64,10 +64,10 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/knapsack: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/knapsack ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/CoinMP.o: nbproject/Makefile-${CND_CONF}.mk CoinMP.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/_ext/1472/CoinMP.o: nbproject/Makefile-${CND_CONF}.mk ../CoinMP.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1472
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG -I../CoinMP/include -I../eigen -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/CoinMP.o CoinMP.cpp
+	$(COMPILE.cc) -g -DDEBUG -I../CoinMP/include -I../eigen -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1472/CoinMP.o ../CoinMP.cpp
 
 ${OBJECTDIR}/Knapsack.o: nbproject/Makefile-${CND_CONF}.mk Knapsack.cpp 
 	${MKDIR} -p ${OBJECTDIR}

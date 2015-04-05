@@ -1,0 +1,10 @@
+prefix=/home/raffa/Documents/discOpt/CoinMP
+libdir=/home/raffa/Documents/discOpt/CoinMP/CoinMP/src
+
+Name: CoinMP
+Description: Simple C API for COIN-OR Solvers Clp and Cbc
+URL: https://projects.coin-or.org/CoinMP
+Version: 1.7
+Libs: ${libdir}/libCoinMP.la 
+Cflags: -I/home/raffa/Documents/discOpt/CoinMP/CoinMP/src -I/home/raffa/Documents/discOpt/CoinMP/CoinMP/src
+Requires: cbc clp osi-clp 

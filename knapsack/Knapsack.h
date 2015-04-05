@@ -8,7 +8,7 @@
 #ifndef KNAPSACK_H
 #define	KNAPSACK_H
 
-#include "CoinMP.h"
+#include "../CoinMP.h"
 
 using std::pair;
     

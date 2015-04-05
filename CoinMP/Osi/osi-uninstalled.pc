@@ -1,0 +1,10 @@
+prefix=/home/raffa/Documents/discOpt/CoinMP
+libdir=/home/raffa/Documents/discOpt/CoinMP/Osi/src/Osi
+
+Name: Osi
+Description: COIN-OR Open Solver Interface
+URL: https://projects.coin-or.org/Osi
+Version: 0.106
+Libs: ${libdir}/libOsi.la 
+Cflags: -I/home/raffa/Documents/discOpt/CoinMP/Osi/src/Osi -I/home/raffa/Documents/discOpt/CoinMP/Osi/src/Osi
+Requires: coinutils 

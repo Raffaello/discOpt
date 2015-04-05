@@ -1,0 +1,10 @@
+prefix=/home/raffa/Documents/discOpt/CoinMP
+libdir=/home/raffa/Documents/discOpt/CoinMP/Osi/src/OsiCommonTest
+
+Name: OsiUnitTests
+Description: COIN-OR Open Solver Interface Common Unit Tests
+URL: https://projects.coin-or.org/Osi
+Version: 0.106
+Libs: ${libdir}/libOsiCommonTests.la
+Cflags: -I/home/raffa/Documents/discOpt/CoinMP/Osi/src/OsiCommonTest
+Requires: osi

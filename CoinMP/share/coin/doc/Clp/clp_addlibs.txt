@@ -1,1 +1,0 @@
--L/home/raffa/Documents/discOpt/CoinMP/lib -lClp -lCoinUtils -lbz2 -lz -llapack -lblas -lm 

@@ -1,1 +1,0 @@
--L/home/raffa/Documents/discOpt/CoinMP/lib -lCbcSolver -lCbc -lCgl -lOsiClp -lClp -lOsi -lCoinUtils -lbz2 -lz -llapack -lblas -lm 

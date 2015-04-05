@@ -80,6 +80,9 @@ protected:
     
     vector<double> _rangeValues; 
     
+    virtual bool loadFile(const string& filename) = 0;
+    virtual bool setUpProblem() = 0;
+    
 private:
     HPROB _hprob         = nullptr;
     const char* _objName = "obj";

@@ -6,8 +6,8 @@
  */
 
 #include "GraphColoring.h"
-//#include <boost/graph/adjacency_matrix.hpp>
-//#include <boost/graph/copy.hpp>
+#include <boost/graph/adjacency_matrix.hpp>
+#include <boost/graph/copy.hpp>
 #include <boost/graph/iteration_macros.hpp>
 
 GraphColoring::GraphColoring(writeDelegate write) : CoinMP(write)
@@ -46,8 +46,9 @@ bool GraphColoring::loadFile(const string& filename)
 bool GraphColoring::setUpProblem() 
 {
     using Eigen::Triplet;
-    //using boost::adjacency_matrix;
-    //using boost::copy_graph;
+    using boost::adjacency_matrix;
+    using boost::copy_graph;
+    using boost::num_vertices;
     
     setObjectSense(false);
     _objCoeff.clear();
@@ -56,10 +57,10 @@ bool GraphColoring::setUpProblem()
     _colTypes.resize(N);    
    
     _rowType.clear();
-    _rowType.resize(E);
+    _rowType.resize(N);
     
     _rhsValue.clear();
-    _rhsValue.resize(E);
+    _rhsValue.resize(N);
     
     _lb.clear();
     _lb.resize(N);
@@ -67,37 +68,55 @@ bool GraphColoring::setUpProblem()
     _ub.resize(N);
     
     _matrix.resize(0,0);
-    _matrix.resize(E,N);
+    _matrix.resize(N,N);
     
-    //adjacency_matrix<vecS, vecS, undirectedS> adj_graph;
-    //copy_graph(graph, adj_graph);
+    adjacency_matrix<undirectedS> adj_graph(num_vertices(graph));
+    BGL_FORALL_EDGES(e, graph, Graph)
+    {
+        add_edge(e.m_source, e.m_target, adj_graph);
+    }
     
     vector<Triplet<double>> tripleList;
     tripleList.reserve(N);
     
+    //to finish the formulation problem
     
     for(unsigned int i = 0; i < N; i++)
     {
         //obj
-        _objCoeff[i] = 1;        
+        _objCoeff[i] = 1;  //Yi
         _ub[i] = N;
-        _lb[i] = 0;
-        _colTypes[i] = 'I';
+        _lb[i] = 1;
+        _colTypes[i] = 'B';
+            
+        //tripleList.push_back(Triplet<double>(i,i,1));
+        
+        _rowType[i]  = 'E';
+        _rhsValue[i] = 1;
+        /*
+        BGL_FORALL_EDGES(e, graph, Graph)
+        {
+            e.m_source + e.m_target <=1
+            tripleList.push_back(Triplet<double>(e.m_source, e.m_target, ));
+        }
+                */
     }
+    
     
     unsigned int i=0;
     BGL_FORALL_EDGES(e, graph, Graph)
     {
         
-        _rowType[i] = 'N';
-        _rhsValue[i] = e.m_target;
-        tripleList.push_back(Triplet<double>(i,0,e.m_source));
+        _rowType[i] = 'L';
+        _rhsValue[i] = 1
+        e.m_target;
+        tripleList.push_back(Triplet<double>(e.m_source,e.m_target,1));
         
         i++;
     }
     
-    if(i!=E)
-        return false;
+    //if(i!=E)
+    //    return false;
     /*
     for(unsigned int i = 0; i < E; i++)
     {

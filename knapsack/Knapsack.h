@@ -29,10 +29,9 @@ public:
     typedef pair<int , int> item;
     
     
-    bool solve(const string& filename);
+    virtual bool solve(const string& filename);
     //bool writeOutput();
 private:
-    string _filename = "";
     unsigned int n = 0;
     int c = 0;
     vector<item> _vItems;

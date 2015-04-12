@@ -7,7 +7,6 @@
 
 
 #include "Knapsack.h"
-#include "coin/CoinMP.h"
 #include <iostream>
 
 /*

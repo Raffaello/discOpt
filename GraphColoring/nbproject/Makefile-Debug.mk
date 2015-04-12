@@ -67,17 +67,17 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphcoloring: ${OBJECTFILES}
 ${OBJECTDIR}/_ext/1472/CoinMP.o: nbproject/Makefile-${CND_CONF}.mk ../CoinMP.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1472
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG -I../eigen -I../CoinMP/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1472/CoinMP.o ../CoinMP.cpp
+	$(COMPILE.cc) -g -DDEBUG -I../eigen -I../CoinMP/include -I../../boost_1_57_0 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1472/CoinMP.o ../CoinMP.cpp
 
 ${OBJECTDIR}/GraphColoring.o: nbproject/Makefile-${CND_CONF}.mk GraphColoring.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG -I../eigen -I../CoinMP/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/GraphColoring.o GraphColoring.cpp
+	$(COMPILE.cc) -g -DDEBUG -I../eigen -I../CoinMP/include -I../../boost_1_57_0 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/GraphColoring.o GraphColoring.cpp
 
 ${OBJECTDIR}/main.o: nbproject/Makefile-${CND_CONF}.mk main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG -I../eigen -I../CoinMP/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -DDEBUG -I../eigen -I../CoinMP/include -I../../boost_1_57_0 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:

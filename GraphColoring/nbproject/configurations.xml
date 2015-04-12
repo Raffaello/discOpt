@@ -47,6 +47,7 @@
           <incDir>
             <pElem>../eigen</pElem>
             <pElem>../CoinMP/include</pElem>
+            <pElem>../../boost_1_57_0</pElem>
           </incDir>
           <preprocessorList>
             <Elem>DEBUG</Elem>
@@ -102,6 +103,7 @@
           <incDir>
             <pElem>../eigen</pElem>
             <pElem>../CoinMP/include</pElem>
+            <pElem>../../boost_1_57_0</pElem>
           </incDir>
           <preprocessorList>
             <Elem>NDEBUG</Elem>

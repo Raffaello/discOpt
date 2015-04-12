@@ -37,6 +37,8 @@ public:
     void writeProblem();
     virtual void writeOutput();
     void reset();
+    
+    virtual bool solve(const string& filename) = 0;
 protected:
     writeDelegate _write;
     
@@ -82,7 +84,7 @@ protected:
     
     virtual bool loadFile(const string& filename) = 0;
     virtual bool setUpProblem() = 0;
-    
+    string _filename = "";
 private:
     HPROB _hprob         = nullptr;
     const char* _objName = "obj";

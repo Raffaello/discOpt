@@ -70,11 +70,11 @@ bool GraphColoring::setUpProblem()
     _matrix.resize(0,0);
     _matrix.resize(N,N);
     
-    adjacency_matrix<undirectedS> adj_graph(num_vertices(graph));
-    BGL_FORALL_EDGES(e, graph, Graph)
-    {
-        add_edge(e.m_source, e.m_target, adj_graph);
-    }
+    //adjacency_matrix<undirectedS> adj_graph(num_vertices(graph));
+    //BGL_FORALL_EDGES(e, graph, Graph)
+    //{
+    //    add_edge(e.m_source, e.m_target, adj_graph);
+    //}
     
     vector<Triplet<double>> tripleList;
     tripleList.reserve(N);
@@ -102,32 +102,12 @@ bool GraphColoring::setUpProblem()
                 */
     }
     
-    
-    unsigned int i=0;
+    //matrix graph
     BGL_FORALL_EDGES(e, graph, Graph)
     {
-        
-        _rowType[i] = 'L';
-        _rhsValue[i] = 1
-        e.m_target;
         tripleList.push_back(Triplet<double>(e.m_source,e.m_target,1));
+    }
         
-        i++;
-    }
-    
-    //if(i!=E)
-    //    return false;
-    /*
-    for(unsigned int i = 0; i < E; i++)
-    {
-        graph.
-        _colTypes[i] = 'B';
-        tripleList.push_back(Triplet<double>(0, i, _vItems[i].second));
-        _rowType[0]  = 'L';
-        _rhsValue[0] = c;
-    }
-    */
-    
     _matrix.setFromTriplets(tripleList.begin(), tripleList.end());
     
 

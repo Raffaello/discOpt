@@ -21,6 +21,8 @@ GraphColoring::~GraphColoring()
 
 bool GraphColoring::loadFile(const string& filename) 
 {
+    using std::tie;
+    
     FILE *f;
     
     _filename.clear();
@@ -33,14 +35,40 @@ bool GraphColoring::loadFile(const string& filename)
     for(register unsigned int i = 0; i < E; i++)
     {
         register unsigned int u,v;
+        register bool inserted;
+        edge_descriptor_t e;
         
         fscanf(f, "%d %d", &u, &v);
-        add_edge(u, v, graph);
+ 
+        
+        tie(e, inserted) = add_edge(u, v, graph);
+        
+        
+        graph[e].id = i;
+        graph[e].color = i;
     }
     
     fclose(f);
     _filename = filename;
     return true;
+}
+
+unsigned int GraphColoring::computeMaxDegree() 
+{
+    register unsigned int max_k = 0;
+    BGL_FORALL_VERTICES(v, graph, Graph_t)
+    {
+        register unsigned int k = 0;
+        BGL_FORALL_INEDGES(v, e, graph, Graph_t)
+        {
+            k++;
+        }
+        
+        if(max_k < k)
+            max_k = k;
+    }
+    
+    return max_k;
 }
 
 bool GraphColoring::setUpProblem() 
@@ -57,10 +85,10 @@ bool GraphColoring::setUpProblem()
     _colTypes.resize(N);    
    
     _rowType.clear();
-    _rowType.resize(N);
+    _rowType.resize(E);
     
     _rhsValue.clear();
-    _rhsValue.resize(N);
+    _rhsValue.resize(E);
     
     _lb.clear();
     _lb.resize(N);
@@ -68,7 +96,7 @@ bool GraphColoring::setUpProblem()
     _ub.resize(N);
     
     _matrix.resize(0,0);
-    _matrix.resize(N,N);
+    _matrix.resize(E,1);
     
     //adjacency_matrix<undirectedS> adj_graph(num_vertices(graph));
     //BGL_FORALL_EDGES(e, graph, Graph)
@@ -77,22 +105,23 @@ bool GraphColoring::setUpProblem()
     //}
     
     vector<Triplet<double>> tripleList;
-    tripleList.reserve(N);
+    tripleList.reserve(E);
     
     //to finish the formulation problem
+    auto ub = computeMaxDegree(); // this should replace N
     
     for(unsigned int i = 0; i < N; i++)
     {
         //obj
-        _objCoeff[i] = 1;  //Yi
-        _ub[i] = N;
-        _lb[i] = 1;
+        _objCoeff[i] = i;  //Yi color index
+        _ub[i] = 1;
+        _lb[i] = 0;
         _colTypes[i] = 'B';
             
         //tripleList.push_back(Triplet<double>(i,i,1));
         
-        _rowType[i]  = 'E';
-        _rhsValue[i] = 1;
+        //_rowType[i]  = 'E';
+        //_rhsValue[i] = 1;
         /*
         BGL_FORALL_EDGES(e, graph, Graph)
         {
@@ -103,9 +132,15 @@ bool GraphColoring::setUpProblem()
     }
     
     //matrix graph
-    BGL_FORALL_EDGES(e, graph, Graph)
+    BGL_FORALL_EDGES(e, graph, Graph_t)
     {
-        tripleList.push_back(Triplet<double>(e.m_source,e.m_target,1));
+        //auto a = graph[e].id;
+        tripleList.push_back(Triplet<double>(e.m_source,0, e.m_source));
+        
+        //auto id = graph[e].id;
+        
+        _rowType[e.m_source]  = 'N';
+        _rhsValue[e.m_source] = e.m_target;
     }
         
     _matrix.setFromTriplets(tripleList.begin(), tripleList.end());

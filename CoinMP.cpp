@@ -278,6 +278,8 @@ void CoinMP::writeProblem()
         _write(str+'\n');
         str.clear();
     }
+    
+    _write("\n");
 }
 
 void CoinMP::writeOutput() 

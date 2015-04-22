@@ -30,6 +30,7 @@ int main(int argc, char** argv)
 #endif  
     if(res == false)
     {
+        cout << endl << endl;
         cout << "error solve : " << argv[1] << endl;
         return -1;
     }

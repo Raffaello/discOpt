@@ -6,7 +6,6 @@
  */
 
 #include "GraphColoring.h"
-#include <boost/graph/adjacency_matrix.hpp>
 #include <boost/graph/copy.hpp>
 #include <boost/graph/iteration_macros.hpp>
 
@@ -35,17 +34,9 @@ bool GraphColoring::loadFile(const string& filename)
     for(register unsigned int i = 0; i < E; i++)
     {
         register unsigned int u,v;
-        register bool inserted;
-        edge_descriptor_t e;
         
-        fscanf(f, "%d %d", &u, &v);
- 
-        
-        tie(e, inserted) = add_edge(u, v, graph);
-        
-        
-        graph[e].id = i;
-        graph[e].color = i;
+        fscanf(f, "%d %d", &u, &v);        
+        add_edge(u, v, graph);
     }
     
     fclose(f);
@@ -74,78 +65,85 @@ unsigned int GraphColoring::computeMaxDegree()
 bool GraphColoring::setUpProblem() 
 {
     using Eigen::Triplet;
-    using boost::adjacency_matrix;
-    using boost::copy_graph;
-    using boost::num_vertices;
+    
+    auto ub = computeMaxDegree() + 1; // this should replace N
+    auto nrows = N+E;
     
     setObjectSense(false);
     _objCoeff.clear();
-    _objCoeff.resize(N);
+    _objCoeff.resize(ub);
     _colTypes.clear();
-    _colTypes.resize(N);    
+    _colTypes.resize(ub);    
    
     _rowType.clear();
-    _rowType.resize(E);
+    _rowType.resize(nrows);
     
     _rhsValue.clear();
-    _rhsValue.resize(E);
+    _rhsValue.resize(nrows);
     
     _lb.clear();
-    _lb.resize(N);
+    _lb.resize(ub);
     _ub.clear();
-    _ub.resize(N);
+    _ub.resize(ub);
     
     _matrix.resize(0,0);
-    _matrix.resize(E,1);
-    
-    //adjacency_matrix<undirectedS> adj_graph(num_vertices(graph));
-    //BGL_FORALL_EDGES(e, graph, Graph)
-    //{
-    //    add_edge(e.m_source, e.m_target, adj_graph);
-    //}
+    _matrix.resize(nrows, ub);
     
     vector<Triplet<double>> tripleList;
-    tripleList.reserve(E);
+    tripleList.reserve(N); 
+            
+    // for each color as column
+    for(unsigned int i = 0; i < ub; i++)
+    {
+        _objCoeff[i] = 1;  //Yi color index
+        _ub[i] = ub;
+        _lb[i] = 0;
+        _colTypes[i] = 'I';  
+    }
     
-    //to finish the formulation problem
-    auto ub = computeMaxDegree(); // this should replace N
+    //Xik 1st constraints sum Xik = 1
+    for(unsigned int i = 0; i < N; i++)
+    {
+        _rowType[i]  = 'E';
+        _rhsValue[i] = 1; 
+        for(unsigned int j = 0; j < ub; j++)
+        {
+            tripleList.push_back(Triplet<double>(i, j, 1));
+        }
+    }
+    
+    //2nd Xik + Xjk <= 1
+    BGL_FORALL_VERTICES(v, graph, Graph_t)
+    {
+        // FIX the triplet matrix
+        BGL_FORALL_OUTEDGES(v, e, graph, Graph_t)
+        {
+            //e.m_source;
+            unsigned int i = N + e.m_target;
+            
+            _rowType[i]  = 'L';
+            _rhsValue[i] = 1;
+            tripleList.push_back(Triplet<double>(i, 0, 1));
+            tripleList.push_back(Triplet<double>(i, 1, 1));
+        }
+    }
+    /*
+    //3rd Xik <= Yik
+    unsigned int idx = N+E;
     
     for(unsigned int i = 0; i < N; i++)
     {
-        //obj
-        _objCoeff[i] = i;  //Yi color index
-        _ub[i] = 1;
-        _lb[i] = 0;
-        _colTypes[i] = 'B';
-            
-        //tripleList.push_back(Triplet<double>(i,i,1));
-        
-        //_rowType[i]  = 'E';
-        //_rhsValue[i] = 1;
-        /*
-        BGL_FORALL_EDGES(e, graph, Graph)
+        unsigned int ii = idx + i*ub;
+        for(unsigned int j = 0; j < ub; j++)
         {
-            e.m_source + e.m_target <=1
-            tripleList.push_back(Triplet<double>(e.m_source, e.m_target, ));
+            _rowType[ii + j] = 'L';
+            _rhsValue[ii+j]
         }
-                */
     }
-    
-    //matrix graph
-    BGL_FORALL_EDGES(e, graph, Graph_t)
-    {
-        //auto a = graph[e].id;
-        tripleList.push_back(Triplet<double>(e.m_source,0, e.m_source));
-        
-        //auto id = graph[e].id;
-        
-        _rowType[e.m_source]  = 'N';
-        _rhsValue[e.m_source] = e.m_target;
-    }
-        
+     * */
+   
     _matrix.setFromTriplets(tripleList.begin(), tripleList.end());
     
-
     return true;
 }
 

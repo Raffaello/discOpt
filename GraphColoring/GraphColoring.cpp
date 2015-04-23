@@ -67,13 +67,15 @@ bool GraphColoring::setUpProblem()
     using Eigen::Triplet;
     
     auto ub = computeMaxDegree() + 1; // this should replace N
-    auto nrows = N+E;
+    auto ncols = ub*N+1;
+    //auto nrows = 3*N;
+    auto nrows= N*3 +E;
     
     setObjectSense(false);
     _objCoeff.clear();
-    _objCoeff.resize(ub);
+    _objCoeff.resize(ncols);
     _colTypes.clear();
-    _colTypes.resize(ub);    
+    _colTypes.resize(ncols); 
    
     _rowType.clear();
     _rowType.resize(nrows);
@@ -82,65 +84,59 @@ bool GraphColoring::setUpProblem()
     _rhsValue.resize(nrows);
     
     _lb.clear();
-    _lb.resize(ub);
+    _lb.resize(ncols);
     _ub.clear();
-    _ub.resize(ub);
+    _ub.resize(ncols);
     
     _matrix.resize(0,0);
-    _matrix.resize(nrows, ub);
+    _matrix.resize(nrows, ncols);
     
     vector<Triplet<double>> tripleList;
-    tripleList.reserve(N); 
-            
-    // for each color as column
-    for(unsigned int i = 0; i < ub; i++)
+    tripleList.reserve(nrows); 
+
+    // Y
+    _objCoeff[0] = 1;
+    _colTypes[0] = 'I';
+    _ub[0] = ub;
+    _lb[0] = 1;
+    
+    for(unsigned int i=1; i<ncols; i++)
     {
-        _objCoeff[i] = 1;  //Yi color index
-        _ub[i] = ub;
+        _objCoeff[i] = 0;
+        _ub[i] = 1;
         _lb[i] = 0;
-        _colTypes[i] = 'I';  
+        _colTypes[i] = 'B';
     }
-    
-    //Xik 1st constraints sum Xik = 1
-    for(unsigned int i = 0; i < N; i++)
-    {
-        _rowType[i]  = 'E';
-        _rhsValue[i] = 1; 
-        for(unsigned int j = 0; j < ub; j++)
-        {
-            tripleList.push_back(Triplet<double>(i, j, 1));
-        }
-    }
-    
-    //2nd Xik + Xjk <= 1
+     
     BGL_FORALL_VERTICES(v, graph, Graph_t)
     {
-        // FIX the triplet matrix
-        BGL_FORALL_OUTEDGES(v, e, graph, Graph_t)
-        {
-            //e.m_source;
-            unsigned int i = N + e.m_target;
-            
-            _rowType[i]  = 'L';
-            _rhsValue[i] = 1;
-            tripleList.push_back(Triplet<double>(i, 0, 1));
-            tripleList.push_back(Triplet<double>(i, 1, 1));
-        }
-    }
-    /*
-    //3rd Xik <= Yik
-    unsigned int idx = N+E;
-    
-    for(unsigned int i = 0; i < N; i++)
-    {
-        unsigned int ii = idx + i*ub;
+        _rowType[v]  = 'E';
+        _rhsValue[v] = 1; 
+        //Xik 1st constraints sum Xik = 1
         for(unsigned int j = 0; j < ub; j++)
         {
-            _rowType[ii + j] = 'L';
-            _rhsValue[ii+j]
+            tripleList.push_back(Triplet<double>(v, v*ub+j+1, 1));
         }
+
+        //2nd
+        _rhsValue[N+v] = ub;
+        _rowType[N+v]  = 'L';
+        tripleList.push_back(Triplet<double>(N+v, 0, 1));
+
+         //3rd Xik + Xjk <= 1
+        //FIX THE ROWS INDEX
+        int j = 0;
+            BGL_FORALL_OUTEDGES(v, e, graph, Graph_t)
+            {
+                unsigned int i = e.m_target;
+                //unsigned int k = e.m_source;
+                _rowType[2*N+v+j]  = 'L';
+                _rhsValue[2*N+v+j] = 1;
+                tripleList.push_back(Triplet<double>(N*2+v+j, v*ub+1, 10));
+                tripleList.push_back(Triplet<double>(N*2+v+j, i*ub+1, 1));
+                j++;
+            }
     }
-     * */
    
     _matrix.setFromTriplets(tripleList.begin(), tripleList.end());
     

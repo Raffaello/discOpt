@@ -27,14 +27,15 @@ int main(int argc, char** argv)
 #ifdef DEBUG
     cout << "Problem: " << endl;
     graphColoring.writeProblem();
-#endif  
+#endif 
+    /*
     if(res == false)
     {
         cout << endl << endl;
         cout << "error solve : " << argv[1] << endl;
         return -1;
     }
-    
+    */
 #ifdef DEBUG
     cout << "Solution: " << endl;
     graphColoring.writeSolution();

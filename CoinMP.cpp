@@ -257,7 +257,7 @@ void CoinMP::writeProblem()
     str += " ";
     for(unsigned int i = 0; i < _objCoeff.size(); i++)
     {
-        auto &v = _objCoeff.at(i);
+        int v = (int)_objCoeff.at(i);
         str += to_string(v) + "X" + to_string(i) + " + ";
     }
     string::size_type l = str.length();
@@ -270,11 +270,13 @@ void CoinMP::writeProblem()
     {
         for(unsigned int j = 0; j < _matrix.cols(); j++)
         {
-            str += to_string(_matrix.coeff(i,j)) + " + ";
+            int v = (int)_matrix.coeff(i,j);
+            str += to_string(v) + " + ";
         }
         
+        int rv = (int)_rhsValue[i];
         str[str.length()-2] = _rowType[i];
-        str += to_string(_rhsValue[i]);
+        str += to_string(rv);
         _write(str+'\n');
         str.clear();
     }

@@ -60,8 +60,7 @@ protected:
     bool loadProblem();
     bool unloadProblem();        
     bool solveProblem(const eSolveMethod method = eSolveMethod::Default);
-    
-    
+   
     inline void setObjectSense(bool max) { ((max)? _objSense = SOLV_OBJSENS_MAX : _objSense = SOLV_OBJSENS_MIN); } 
     
     double _objConst = 0.0;

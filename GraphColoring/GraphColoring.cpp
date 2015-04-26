@@ -67,9 +67,11 @@ bool GraphColoring::setUpProblem()
     using Eigen::Triplet;
     
     auto ub = computeMaxDegree() + 1; // this should replace N
-    auto ncols = ub*N+1;
+    auto ncols = ub*N;
     //auto nrows = 3*N;
-    auto nrows= N*3 +E;
+    //auto nrows= N*5;
+    //auto nrows = N + N*ub + N*(N-1);
+    auto nrows = N + N*(N-1);
     
     setObjectSense(false);
     _objCoeff.clear();
@@ -94,48 +96,64 @@ bool GraphColoring::setUpProblem()
     vector<Triplet<double>> tripleList;
     tripleList.reserve(nrows); 
 
+    /*
     // Y
-    _objCoeff[0] = 1;
+    _objCoeff[0] = 1.0;
     _colTypes[0] = 'I';
     _ub[0] = ub;
-    _lb[0] = 1;
-    
-    for(unsigned int i=1; i<ncols; i++)
+    _lb[0] = 1.0;
+    */
+    for(unsigned int i=0; i<ncols; i++)
     {
-        _objCoeff[i] = 0;
-        _ub[i] = 1;
-        _lb[i] = 0;
+        _objCoeff[i] = i%ub + 1;
+        _ub[i] = 1.0;
+        _lb[i] = 0.0;
         _colTypes[i] = 'B';
     }
-     
+    
+    int i=0; 
+    //int i2=N;
+    //int i3=N + N*ub;
+    int i3=N;
     BGL_FORALL_VERTICES(v, graph, Graph_t)
     {
-        _rowType[v]  = 'E';
-        _rhsValue[v] = 1; 
+        _rowType[i]  = 'E';
+        _rhsValue[i] = 1; 
         //Xik 1st constraints sum Xik = 1
         for(unsigned int j = 0; j < ub; j++)
         {
-            tripleList.push_back(Triplet<double>(v, v*ub+j+1, 1));
+            //Xik 1st constraints sum Xik = 1
+            tripleList.push_back(Triplet<double>(i, v+ub*j, 1.0));
         }
-
-        //2nd
-        _rhsValue[N+v] = ub;
-        _rowType[N+v]  = 'L';
-        tripleList.push_back(Triplet<double>(N+v, 0, 1));
-
-         //3rd Xik + Xjk <= 1
-        //FIX THE ROWS INDEX
-        int j = 0;
-            BGL_FORALL_OUTEDGES(v, e, graph, Graph_t)
+        ++i;
+        /*
+        //2nd 
+        for(unsigned int j = 0; j < ub; j++)
+        {
+            _rhsValue[i2] = ub;
+             _rowType[i2]  = 'L';
+            tripleList.push_back(Triplet<double>(i2, 0, 1));
+            tripleList.push_back(Triplet<double>(i2, v+ub*j+1, ub));
+            ++i2;
+        }
+        */ 
+        //3rd Xik + Xjk <= 1
+        BGL_FORALL_OUTEDGES(v, e, graph, Graph_t)
+        {    
+            unsigned int ii = e.m_target;
+            
+            if(v>=ii)
+                continue;
+            
+            for(unsigned int j=0; j<ub; j++)
             {
-                unsigned int i = e.m_target;
-                //unsigned int k = e.m_source;
-                _rowType[2*N+v+j]  = 'L';
-                _rhsValue[2*N+v+j] = 1;
-                tripleList.push_back(Triplet<double>(N*2+v+j, v*ub+1, 10));
-                tripleList.push_back(Triplet<double>(N*2+v+j, i*ub+1, 1));
-                j++;
-            }
+                _rowType[i3]  = 'E';
+                _rhsValue[i3] = 1;
+                tripleList.push_back(Triplet<double>(i3, v+ub*j, 1));
+                tripleList.push_back(Triplet<double>(i3, ii+ub*j, 1));
+                i3++;
+            } 
+        }
     }
    
     _matrix.setFromTriplets(tripleList.begin(), tripleList.end());
@@ -165,6 +183,3 @@ bool GraphColoring::solve(const string& filename)
     
     return false;
 }
-
-
-

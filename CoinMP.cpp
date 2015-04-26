@@ -243,9 +243,11 @@ void CoinMP::writeSolution()
     CoinGetSolutionValues(_hprob, xValues, nullptr, nullptr, nullptr);
     for(int i = 0; i < colCount; i++)
     {
-        _write(string("X")+to_string(i)+" = "+ to_string(xValues[i]));
+        _write(string("X")+to_string(i)+" = "+ to_string(xValues[i]) + " ");
     }
    
+    _write("\n");
+    
     delete[] xValues;
 }
 
